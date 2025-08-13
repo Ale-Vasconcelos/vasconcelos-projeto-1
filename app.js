@@ -13,7 +13,7 @@ function carregarQuiz() {
             const btn = document.createElement("div");
             btn.classList.add("opcao");
             btn.textContent = opcao;
-            btn.onclick = () => verificarResposta(btn, i, q.correta);
+            btn.addEventListener("click", () => verificarResposta(btn, i, q.correta));
             perguntaDiv.appendChild(btn);
         });
 
@@ -23,7 +23,7 @@ function carregarQuiz() {
 
 function verificarResposta(botao, resposta, correta) {
     const opcoes = botao.parentElement.querySelectorAll(".opcao");
-    opcoes.forEach(o => o.onclick = null);
+    opcoes.forEach(o => o.style.pointerEvents = "none");
 
     if (resposta === correta) {
         botao.classList.add("correto");
@@ -37,8 +37,10 @@ function verificarResposta(botao, resposta, correta) {
 }
 
 function verificarFim() {
-    const respondidas = document.querySelectorAll(".correto, .errado").length;
-    if (respondidas === perguntas.length) {
+    const respondidas = document.querySelectorAll(".pergunta").length;
+    const finalizadas = document.querySelectorAll(".pergunta .correto, .pergunta .errado").length / perguntas[0].opcoes.length;
+
+    if (finalizadas === respondidas) {
         document.getElementById("resultado").innerHTML = 
             `<strong>Você acertou ${score} de ${perguntas.length} perguntas!</strong>`;
         document.getElementById("reiniciar").style.display = "block";
